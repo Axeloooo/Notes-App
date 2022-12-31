@@ -1,63 +1,51 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:project1/views/login_view.dart';
+
+import 'firebase_options.dart';
 
 void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(
+    MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.pink,
       ),
-      home: const MyHomePage(),
-    );
-  }
+      home: const HomePage(),
+    )
+  );
 }
 
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Container(
-          padding: const EdgeInsets.all(10.0),
-          //constraints: BoxConstraints.expand(),
-          //alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(
-              color: Colors.pink,
-              style: BorderStyle.solid,
-              width: 5.0
-            ),
-            borderRadius: const BorderRadius.all(Radius.circular(20.0)),
-            // ignore: prefer_const_literals_to_create_immutables
-            boxShadow: [
-              const BoxShadow(
-                color: Colors.grey,
-                spreadRadius: 2.0,
-                blurRadius: 5.0,
-              )
-            ]
-          ),
-          child: const Text(
-            "Creating a mobile app!", 
-            style: TextStyle(
-              fontSize: 20.0, 
-              color: Colors.black
-              )
-            )
-          )
-        ),
+      appBar: AppBar(
+        title: const Text('Register'),
+      ),
+      body: FutureBuilder(
+        future: Firebase.initializeApp(
+                  options: DefaultFirebaseOptions.currentPlatform,
+                ),
+        builder: (context, snapshot) {
+          switch(snapshot.connectionState) {
+            case ConnectionState.done:
+              final user = FirebaseAuth.instance.currentUser;
+              if(user?.emailVerified ?? false) {
+                print('Your email is verified');
+              } else {
+                print('You have to verify your email first');
+              }
+              return const Text('Done');
+            default:
+            return const Text('Loading...');
+          }
+        },
+      ),
     );
   }
 }
