@@ -5,8 +5,6 @@ import 'package:project1/constants/routes.dart';
 import 'package:project1/views/login_view.dart';
 import 'package:project1/views/register_view.dart';
 import 'package:project1/views/verify_email_view.dart';
-import 'dart:developer' as devtools show log; 
-
 import 'firebase_options.dart';
 
 void main() {
@@ -82,7 +80,7 @@ class _MainViewState extends State<MainView> {
             onSelected: (value) async {
               switch(value) {
                 case MenuAction.logout:
-                  final shouldLogout = await showLogoutDialogue(context);
+                  final shouldLogout = await showLogoutDialog(context);
                   if(shouldLogout) {
                     await FirebaseAuth.instance.signOut();
                     Navigator.of(context).pushNamedAndRemoveUntil(
@@ -110,7 +108,7 @@ class _MainViewState extends State<MainView> {
 
 }
 
-Future<bool> showLogoutDialogue(BuildContext context) {
+Future<bool> showLogoutDialog(BuildContext context) {
   return showDialog<bool>(
     context: context,
     builder: (context) {
