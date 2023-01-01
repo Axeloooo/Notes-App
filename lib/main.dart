@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:project1/constants/routes.dart';
 import 'package:project1/views/login_view.dart';
 import 'package:project1/views/register_view.dart';
 import 'package:project1/views/verify_email_view.dart';
@@ -16,10 +17,11 @@ void main() {
       theme: ThemeData(
         primarySwatch: Colors.pink,
       ),
-      home: const MainView(),
+      home: const HomePage(),
       routes: {
-        '/login':(context) => const LoginView(),
-        '/register':(context) => const RegisterView(),
+        loginRoute:(context) => const LoginView(),
+        registerRoute:(context) => const RegisterView(),
+        mainRoute:(context) => const MainView(),
       },
     )
   );
@@ -40,7 +42,6 @@ class HomePage extends StatelessWidget {
           case ConnectionState.done:
             final user = FirebaseAuth.instance.currentUser;
             if(user != null) {
-              print(user);
               if(user.emailVerified) {
                 return const MainView();
               } else {
@@ -85,7 +86,7 @@ class _MainViewState extends State<MainView> {
                   if(shouldLogout) {
                     await FirebaseAuth.instance.signOut();
                     Navigator.of(context).pushNamedAndRemoveUntil(
-                      '/login',
+                      loginRoute,
                       (route) => false
                     );
                   }
