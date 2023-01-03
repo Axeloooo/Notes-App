@@ -1,5 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:project1/services/auth/auth_service.dart';
 
 class VerifyEmailView extends StatefulWidget {
   const VerifyEmailView({super.key});
@@ -9,33 +9,38 @@ class VerifyEmailView extends StatefulWidget {
 }
 
 class _VerifyEmailViewState extends State<VerifyEmailView> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Email verification'),
+        title: const Text(
+          'Email verification',
+        ),
       ),
       body: Column(
-          children: [
-            const Text("We've sent you a verification email. Please open it to verify your account."),
-            const Text("If you haven't received a verification email yet, press the button below."),
-            TextButton(
+        children: [
+          const Text(
+            "We've sent you a verification email. Please open it to verify your account.",
+          ),
+          const Text(
+            "If you haven't received a verification email yet, press the button below.",
+          ),
+          TextButton(
               onPressed: () async {
-                final user = FirebaseAuth.instance.currentUser;
-                await user?.sendEmailVerification(); 
-              }, 
-              child: const Text('Send email verification')
-            ),
-            TextButton(
+                await AuthService.firebase().sendEmailVerification();
+              },
+              child: const Text(
+                'Send email verification',
+              )),
+          TextButton(
               onPressed: () async {
-                await FirebaseAuth.instance.signOut();
-              }, 
-              child: const Text('Restart')
-            ),
-          ],
+                await AuthService.firebase().logout();
+              },
+              child: const Text(
+                'Restart',
+              )),
+        ],
       ),
     );
   }
-  
 }
